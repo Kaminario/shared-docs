@@ -254,5 +254,3 @@ sudo mkfs.ext4 -E nodiscard,lazy_itable_init=0,lazy_journal_init=0 /dev/mapper/<
 sudo mkdir -p /mnt/<dir>
 sudo mount -o sync,noatime,barrier=0 /dev/mapper/<mpathX> /mnt/<dir>
 ```
-
-Use the same mount options in `/etc/fstab`, together with `_netdev`.
