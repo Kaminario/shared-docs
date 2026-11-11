@@ -204,39 +204,13 @@ devices {
         dev_loss_tmo 3
         max_sectors_kb 1024
     }
-    device {
-        vendor "SILK"
-        product "KDP"
-        path_grouping_policy multibus
-        path_checker tur
-        path_selector "queue-length 0"
-        no_path_retry fail
-        hardware_handler "0"
-        failback immediate
-        fast_io_fail_tmo 2
-        dev_loss_tmo 3
-        max_sectors_kb 1024
-    }
-    device {
-        vendor "KMNRIO"
-        product "KDP"
-        path_grouping_policy multibus
-        path_checker tur
-        path_selector "queue-length 0"
-        no_path_retry fail
-        hardware_handler "0"
-        failback immediate
-        fast_io_fail_tmo 2
-        dev_loss_tmo 3
-        max_sectors_kb 1024
-    }
 }
 blacklist_exceptions {
     property "(ID_SCSI_VPD|ID_WWN|ID_SERIAL)"
 }
 ```
 
-The blacklist keeps multipath away from local disks. The device entries tell it to use all paths to the SDP at once and to fail over quickly when a path drops.
+The blacklist keeps multipath away from local disks. The device entry tells it to use all paths to the SDP at once and to fail over quickly when a path drops.
 
 `/usr/lib/udev/rules.d/98-sdp-io.rules` (I/O timeout and scheduler for SDP disks):
 
