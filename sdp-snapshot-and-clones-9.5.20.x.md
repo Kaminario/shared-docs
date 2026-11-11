@@ -2,7 +2,8 @@
 
 Target: Silk SDP 9.5.20.x REST API (`/api/v2`).
 
-The full REST API reference is the *Silk RESTful API Guide*. You can get it from Silk support.
+The full REST API reference is the *Silk RESTful API Guide*:
+<https://support.silk.us/sys/document/preview/Draft-v8595-Silk-RESTful-API-Guide-250625025250263.pdf>
 
 > **Important: volume names and volume group names must be unique in the whole SDP.**
 > Two volumes cannot have the same name, even in different volume groups.
