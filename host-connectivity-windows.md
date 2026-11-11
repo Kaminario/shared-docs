@@ -15,6 +15,42 @@ These steps assume iSCSI. If you use Fibre Channel or NVMe, they do not apply. I
 
 The `-k` flag skips the certificate check because the SDP uses its own certificate. Drop it if you trust the certificate.
 
+## Before you start: turn on Accelerated Networking
+
+The host network card (NIC) that carries iSCSI traffic to the SDP must have Azure Accelerated Networking turned on. Without it, the traffic goes through the hypervisor's software switch and the host does not get the throughput and latency the SDP is sized for. If the host uses a separate NIC for storage, that is the NIC that needs it. Turning it on for every NIC on the host does no harm.
+
+Run these Azure CLI commands from Azure Cloud Shell or any machine logged in with `az login`. `<resource group>` and `<VM name>` are the host VM's.
+
+**Find the NIC and check it.**
+
+```bash
+az vm show -g <resource group> -n <VM name> \
+  --query "networkProfile.networkInterfaces[].id" -o tsv
+
+az network nic show -g <resource group> -n <NIC name> \
+  --query enableAcceleratedNetworking
+```
+
+The first command lists the VM's NICs. The last part of each line is the `<NIC name>`. The second command must print `true`.
+
+**Turn it on.** If it prints `false`, stop the VM, turn it on, and start the VM again. The VM is offline for a few minutes, so plan for it.
+
+```bash
+az vm deallocate -g <resource group> -n <VM name>
+az network nic update -g <resource group> -n <NIC name> --accelerated-networking true
+az vm start -g <resource group> -n <VM name>
+```
+
+If the update fails, the VM size does not support Accelerated Networking. Resize the VM to a size that does (most general purpose and memory optimized sizes with 2 or more vCPUs), then try again.
+
+**Check it on the host.** After the VM starts, run in PowerShell:
+
+```powershell
+Get-NetAdapter | Where-Object { $_.InterfaceDescription -match 'Mellanox|Azure Network Adapter' }
+```
+
+It must list a Mellanox virtual function adapter, or on newer VM sizes a Microsoft Azure Network Adapter (MANA), with status `Up`. If it lists nothing, Accelerated Networking is not active on the host.
+
 ## 1. Register the host in Silk
 
 Create the host.
