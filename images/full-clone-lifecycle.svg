@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="360" viewBox="0 0 900 360" font-family="Helvetica, Arial, sans-serif" font-size="13">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#3b4a5a"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="360" fill="#ffffff"/>
+  <text x="450" y="30" text-anchor="middle" font-size="17" font-weight="bold" fill="#1f2933">Step 4: full clone from a thin clone</text>
+
+  <!-- clones vg -->
+  <rect x="20" y="50" width="860" height="140" rx="10" fill="#eef8f0" stroke="#3f8f55" stroke-width="2"/>
+  <text x="35" y="72" font-weight="bold" fill="#2d6a3e">prod-clones-vg</text>
+
+  <rect x="50" y="100" width="170" height="50" rx="6" fill="#ffffff" stroke="#3f8f55" stroke-width="1.5"/>
+  <text x="135" y="121" text-anchor="middle" font-weight="bold" fill="#1f2933">prod-vol1-tc</text>
+  <text x="135" y="139" text-anchor="middle" font-size="11" fill="#52606d">source (thin clone)</text>
+
+  <rect x="320" y="95" width="260" height="60" rx="6" fill="#fff8e1" stroke="#d4a017" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="450" y="118" text-anchor="middle" font-size="12" font-weight="bold" fill="#7a5c00">Clone_Origin_ts_&lt;time&gt;_UTC</text>
+  <text x="450" y="136" text-anchor="middle" font-size="11" fill="#52606d">automatic snapshot, retention Clone_Retention</text>
+  <text x="450" y="175" text-anchor="middle" font-size="11" fill="#7b8794">(made only when the request has no source_snapshot)</text>
+
+  <rect x="680" y="100" width="170" height="50" rx="6" fill="#ffffff" stroke="#4a7bb7" stroke-width="2"/>
+  <text x="765" y="121" text-anchor="middle" font-weight="bold" fill="#1f2933">prod-vol1-fc</text>
+  <text x="765" y="139" text-anchor="middle" font-size="11" fill="#52606d">full clone</text>
+
+  <line x1="220" y1="125" x2="318" y2="125" stroke="#3b4a5a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="269" y="115" text-anchor="middle" font-size="11" fill="#3b4a5a">1. snapshot</text>
+  <line x1="580" y1="125" x2="678" y2="125" stroke="#3b4a5a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="629" y="115" text-anchor="middle" font-size="11" fill="#3b4a5a">2. copy data</text>
+
+  <!-- timeline -->
+  <text x="50" y="222" font-weight="bold" fill="#1f2933">full_clone field of prod-vol1-fc over time</text>
+
+  <rect x="50" y="235" width="200" height="44" rx="6" fill="#f5f7fa" stroke="#7b8794"/>
+  <text x="150" y="262" text-anchor="middle" font-weight="bold" fill="#1f2933">state_text: STARTING</text>
+
+  <rect x="350" y="235" width="200" height="44" rx="6" fill="#fff4e5" stroke="#d97706"/>
+  <text x="450" y="254" text-anchor="middle" font-weight="bold" fill="#1f2933">state_text: COPYING</text>
+  <text x="450" y="271" text-anchor="middle" font-size="11" fill="#52606d">progress 0 → 100</text>
+
+  <rect x="650" y="235" width="200" height="44" rx="6" fill="#eef8f0" stroke="#3f8f55" stroke-width="1.5"/>
+  <text x="750" y="254" text-anchor="middle" font-weight="bold" fill="#1f2933">full_clone = {}</text>
+  <text x="750" y="271" text-anchor="middle" font-size="11" fill="#52606d">source_snap = null</text>
+
+  <line x1="250" y1="257" x2="348" y2="257" stroke="#3b4a5a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="550" y1="257" x2="648" y2="257" stroke="#3b4a5a" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <text x="150" y="302" text-anchor="middle" font-size="12" fill="#1f2933">right after POST</text>
+  <text x="450" y="302" text-anchor="middle" font-size="12" fill="#1f2933">Moving / renaming the full clone is OK</text>
+  <text x="450" y="320" text-anchor="middle" font-size="12" font-weight="bold" fill="#c62828">Do NOT delete prod-vol1-tc yet</text>
+  <text x="750" y="302" text-anchor="middle" font-size="12" fill="#1f2933">Copy done. No "DONE" state.</text>
+  <text x="750" y="320" text-anchor="middle" font-size="12" font-weight="bold" fill="#2d6a3e">Now prod-vol1-tc may be deleted</text>
+</svg>

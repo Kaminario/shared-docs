@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="490" viewBox="0 0 900 490" font-family="Helvetica, Arial, sans-serif" font-size="13">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#3b4a5a"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#c62828"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="490" fill="#ffffff"/>
+
+  <text x="450" y="30" text-anchor="middle" font-size="17" font-weight="bold" fill="#1f2933">A volume that has thin clones cannot move to another volume group</text>
+
+  <!-- prod-vg -->
+  <rect x="20" y="60" width="310" height="230" rx="10" fill="#eef4fb" stroke="#4a7bb7" stroke-width="2"/>
+  <text x="35" y="82" font-weight="bold" fill="#2c4f7c">prod-vg</text>
+
+  <rect x="40" y="100" width="120" height="40" rx="6" fill="#ffffff" stroke="#c62828" stroke-width="2.5"/>
+  <text x="100" y="125" text-anchor="middle" font-weight="bold" fill="#1f2933">prod-vol1</text>
+
+  <rect x="40" y="150" width="120" height="40" rx="6" fill="#ffffff" stroke="#9aa5b1"/>
+  <text x="100" y="175" text-anchor="middle" fill="#7b8794">prod-vol2</text>
+  <rect x="40" y="200" width="120" height="40" rx="6" fill="#ffffff" stroke="#9aa5b1"/>
+  <text x="100" y="225" text-anchor="middle" fill="#7b8794">prod-vol3</text>
+
+  <!-- snapshot -->
+  <rect x="180" y="100" width="135" height="140" rx="6" fill="#fff8e1" stroke="#d4a017" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="247" y="118" text-anchor="middle" font-size="12" font-weight="bold" fill="#7a5c00">snapshot prod-snap1</text>
+  <rect x="192" y="128" width="111" height="28" rx="4" fill="#ffe8a3" stroke="#d4a017"/>
+  <text x="247" y="147" text-anchor="middle" font-size="12" fill="#1f2933">part of prod-vol1</text>
+  <rect x="192" y="162" width="111" height="28" rx="4" fill="#fffdf5" stroke="#e5c97a"/>
+  <text x="247" y="181" text-anchor="middle" font-size="12" fill="#7b8794">part of prod-vol2</text>
+  <rect x="192" y="196" width="111" height="28" rx="4" fill="#fffdf5" stroke="#e5c97a"/>
+  <text x="247" y="215" text-anchor="middle" font-size="12" fill="#7b8794">part of prod-vol3</text>
+
+  <!-- vol1 -> its snapshot part -->
+  <line x1="160" y1="120" x2="190" y2="140" stroke="#3b4a5a" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- prod-clones-vg -->
+  <rect x="380" y="60" width="230" height="140" rx="10" fill="#eef8f0" stroke="#3f8f55" stroke-width="2"/>
+  <text x="395" y="82" font-weight="bold" fill="#2d6a3e">prod-clones-vg</text>
+  <rect x="400" y="110" width="190" height="44" rx="6" fill="#ffffff" stroke="#3f8f55" stroke-width="1.5"/>
+  <text x="495" y="129" text-anchor="middle" font-weight="bold" fill="#1f2933">prod-vol1-tc</text>
+  <text x="495" y="146" text-anchor="middle" font-size="11" fill="#52606d">thin clone</text>
+
+  <!-- snapshot part -> thin clone -->
+  <line x1="303" y1="142" x2="398" y2="132" stroke="#3b4a5a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="356" y="112" text-anchor="middle" font-size="11" fill="#3b4a5a">is_thin_clone</text>
+
+  <!-- prod-bkp-vg -->
+  <rect x="660" y="60" width="220" height="140" rx="10" fill="#f7f7f7" stroke="#7b8794" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="675" y="82" font-weight="bold" fill="#52606d">prod-bkp-vg</text>
+  <text x="770" y="140" text-anchor="middle" font-size="12" fill="#9aa5b1">(target)</text>
+
+  <!-- blocked move -->
+  <path d="M40,120 L10,120 L10,320 L770,320 L770,204" fill="none" stroke="#c62828" stroke-width="2.5" stroke-dasharray="8,5" marker-end="url(#arrowRed)"/>
+  <circle cx="435" cy="320" r="15" fill="#ffffff" stroke="#c62828" stroke-width="2.5"/>
+  <line x1="426" y1="311" x2="444" y2="329" stroke="#c62828" stroke-width="3"/>
+  <line x1="444" y1="311" x2="426" y2="329" stroke="#c62828" stroke-width="3"/>
+  <text x="435" y="358" text-anchor="middle" font-weight="bold" fill="#c62828">PATCH /volumes/&lt;prod-vol1&gt;  {"volume_group": prod-bkp-vg}</text>
+  <text x="435" y="378" text-anchor="middle" font-size="12" fill="#c62828">400 MC_ERR_NOT_ALLOWED: "volume prod-vol1 is thin clone origin"</text>
+
+  <!-- fix -->
+  <rect x="20" y="405" width="860" height="70" rx="8" fill="#f5f7fa" stroke="#cbd2d9"/>
+  <text x="35" y="428" font-weight="bold" fill="#1f2933">Fix</text>
+  <text x="35" y="455" fill="#1f2933">1. Wait until any full clone made from prod-vol1-tc has finished copying.   2. DELETE prod-vol1-tc.   3. Move prod-vol1 (now allowed).</text>
+</svg>

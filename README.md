@@ -10,6 +10,7 @@ Each file covers one task. Pick the one that matches your system and follow it f
 |---|---|
 | [host-connectivity-windows.md](host-connectivity-windows.md) | Connect a Windows host to a Silk Data Platform (SDP) over iSCSI using the SDP REST API: register the host, link its IQN, map a volume, connect, set up multipath, and bring the disk online. |
 | [host-connectivity-linux.md](host-connectivity-linux.md) | Connect a Linux host to a Silk Data Platform (SDP) over iSCSI using the SDP REST API: register the host, link its IQN, map a volume, connect, set up multipath, then format and mount the volume. |
+| [sdp-snapshot-and-clones-9.5.20.x.md](sdp-snapshot-and-clones-9.5.20.x.md) | SDP 9.5.20.x, using the SDP REST API with curl: snapshot a volume group, create thin clones and a full clone, then replace a production volume with its full clone. |
 
 ## Using the guides
 
