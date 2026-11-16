@@ -247,17 +247,27 @@ sudo iscsiadm -m session --rescan
 sudo multipath -ll
 ```
 
-The volume appears as `/dev/mapper/mpathX`. Check that its serial matches the volume's `scsi_sn`. You may also see a small 256 KB device. That is the SDP control device, so leave it alone. Then format and mount your volume:
+The volume appears as `/dev/mapper/mpathX`. Check that its serial matches the volume's `scsi_sn`. You may also see a small 256 KB device. That is the SDP control device, so leave it alone. Then format and mount the volume with XFS or ext4, as shown below.
+
+**XFS**
+
+Format with `-K` so that `mkfs.xfs` doesn't discard (TRIM) the whole volume first. XFS needs no equivalent of ext4's `lazy_itable_init=0` and `lazy_journal_init=0`: it creates inodes as it needs them and writes out its log during `mkfs`.
 
 ```bash
-sudo mkfs.xfs /dev/mapper/<mpathX>
+sudo mkfs.xfs -K /dev/mapper/<mpathX>
 sudo mkdir -p /mnt/<dir>
-sudo mount /dev/mapper/<mpathX> /mnt/<dir>
+sudo mount -o noatime /dev/mapper/<mpathX> /mnt/<dir>
 ```
 
-For a mount that survives a reboot, add the volume's UUID (`blkid`) to `/etc/fstab` with the `_netdev` option.
+Don't add `nobarrier`. Linux 4.19 and later removed this option, and a mount that uses it fails. To keep the XFS mount after a reboot, add it to `/etc/fstab` with `_netdev`. Set the last field to `0`, because XFS checks itself at mount time and `fsck.xfs` does nothing:
 
-**If you use ext4 instead of XFS**, format and mount with these options:
+```
+UUID=<uuid>  /mnt/<dir>  xfs  _netdev,noatime  0 0
+```
+
+**ext4**
+
+Format and mount with these options:
 
 ```bash
 sudo mkfs.ext4 -E nodiscard,lazy_itable_init=0,lazy_journal_init=0 /dev/mapper/<mpathX>
@@ -265,10 +275,10 @@ sudo mkdir -p /mnt/<dir>
 sudo mount -o sync,noatime,barrier=0 /dev/mapper/<mpathX> /mnt/<dir>
 ```
 
-To keep the ext4 mount after a reboot, put the same mount options in `/etc/fstab` together with `_netdev`. Without `_netdev`, systemd tries to mount the volume before iSCSI has logged in, and the mount fails at boot:
+To keep the ext4 mount after a reboot, put the same mount options in `/etc/fstab` together with `_netdev`. Without `_netdev` (for XFS or ext4), systemd tries to mount the volume before iSCSI has logged in, and the mount fails at boot:
 
 ```
 UUID=<uuid>  /mnt/<dir>  ext4  _netdev,sync,noatime,barrier=0  0 0
 ```
 
-Get the UUID with `sudo blkid /dev/mapper/<mpathX>`. If you reformat the volume, it gets a new UUID, so update `/etc/fstab`. Then run `sudo systemctl daemon-reload`, and test with `sudo mount /mnt/<dir>` before you reboot.
+For either file system, get the UUID with `sudo blkid /dev/mapper/<mpathX>`. If you reformat the volume, it gets a new UUID, so update `/etc/fstab`. Then run `sudo systemctl daemon-reload`, and test with `sudo mount /mnt/<dir>` before you reboot.
