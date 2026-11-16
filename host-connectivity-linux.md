@@ -264,3 +264,11 @@ sudo mkfs.ext4 -E nodiscard,lazy_itable_init=0,lazy_journal_init=0 /dev/mapper/<
 sudo mkdir -p /mnt/<dir>
 sudo mount -o sync,noatime,barrier=0 /dev/mapper/<mpathX> /mnt/<dir>
 ```
+
+To keep the ext4 mount after a reboot, put the same mount options in `/etc/fstab` together with `_netdev`. Without `_netdev`, systemd tries to mount the volume before iSCSI has logged in, and the mount fails at boot:
+
+```
+UUID=<uuid>  /mnt/<dir>  ext4  _netdev,sync,noatime,barrier=0  0 0
+```
+
+Get the UUID with `sudo blkid /dev/mapper/<mpathX>`. If you reformat the volume, it gets a new UUID, so update `/etc/fstab`. Then run `sudo systemctl daemon-reload`, and test with `sudo mount /mnt/<dir>` before you reboot.
