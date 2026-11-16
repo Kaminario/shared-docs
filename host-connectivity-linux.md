@@ -256,13 +256,13 @@ Format with `-K` so that `mkfs.xfs` doesn't discard (TRIM) the whole volume firs
 ```bash
 sudo mkfs.xfs -K /dev/mapper/<mpathX>
 sudo mkdir -p /mnt/<dir>
-sudo mount -o noatime /dev/mapper/<mpathX> /mnt/<dir>
+sudo mount -o sync,noatime /dev/mapper/<mpathX> /mnt/<dir>
 ```
 
 Don't add `nobarrier`. Linux 4.19 and later removed this option, and a mount that uses it fails. To keep the XFS mount after a reboot, add it to `/etc/fstab` with `_netdev`. Set the last field to `0`, because XFS checks itself at mount time and `fsck.xfs` does nothing:
 
 ```
-UUID=<uuid>  /mnt/<dir>  xfs  _netdev,noatime  0 0
+UUID=<uuid>  /mnt/<dir>  xfs  _netdev,sync,noatime  0 0
 ```
 
 **ext4**
